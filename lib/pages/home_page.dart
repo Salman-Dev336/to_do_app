@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:to_do_app/utils/dialog_box.dart';
 import 'package:to_do_app/utils/todo_tile.dart';
 
 class HomePage extends StatefulWidget {
@@ -20,9 +21,20 @@ class _HomePageState extends State<HomePage> {
   void checkBoxChanged(bool? value, int index){
     setState((){
       toDoList[index][1] = !toDoList[index][1];
-
     });
   }
+
+  // methiod for creating new task
+  void createTask(){
+    showDialog(
+      context: context,
+      builder: (context){
+        return DialogBox();
+
+      },
+    );
+  }
+
 
 
 
@@ -36,6 +48,13 @@ class _HomePageState extends State<HomePage> {
         centerTitle: true,
         elevation: 0,
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: (){
+          createTask();
+
+        },
+        child: Icon(Icons.add_card_sharp),
+        ),
       body: ListView.builder(
         itemCount: toDoList.length,
         itemBuilder:(context, index){
@@ -45,11 +64,9 @@ class _HomePageState extends State<HomePage> {
             onChanged:(value)=>{
               checkBoxChanged(value, index),
             }
-
-
           );
         },
-         ),
+      ),
     );
   }
 }

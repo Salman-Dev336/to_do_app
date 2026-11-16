@@ -24,8 +24,8 @@ class ToDoTile extends StatelessWidget {
               // check box
               Checkbox(
                 value: taskCompleted,
-                 onChanged: onChanged,
-              activeColor: Colors.green[700],
+                onChanged: onChanged,
+                activeColor: Colors.green[700],
               ),
 
               //task Name
