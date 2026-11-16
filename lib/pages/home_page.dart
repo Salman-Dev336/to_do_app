@@ -11,7 +11,10 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
-  List toDoList = [
+  //text controller
+  final _controller = TextEditingController();
+
+  final List<List<Object>> toDoList = [
     ["make tutorial", false,],
     ["Do exercise", false],
     ['build a todo app', false],
@@ -20,8 +23,24 @@ class _HomePageState extends State<HomePage> {
   //method for checkbox changed
   void checkBoxChanged(bool? value, int index){
     setState((){
-      toDoList[index][1] = !toDoList[index][1];
+    toDoList[index][1] = value ?? false;
     });
+  }
+
+  void deleteTask(int index) {
+    setState(() {
+      toDoList.removeAt(index);
+    });
+  }
+
+  //method for saving new task
+
+  void saveNewTask(){
+    setState(() {
+      toDoList.add([_controller.text, false]);
+      _controller.clear();
+    });
+    Navigator.of(context).pop();
   }
 
   // methiod for creating new task
@@ -29,15 +48,21 @@ class _HomePageState extends State<HomePage> {
     showDialog(
       context: context,
       builder: (context){
-        return DialogBox();
+        return DialogBox(
+          controller: _controller,
+          onSave: saveNewTask,
+          onCancel: ()=> Navigator.of(context).pop(),
+        );
 
       },
     );
   }
 
-
-
-
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,11 +84,12 @@ class _HomePageState extends State<HomePage> {
         itemCount: toDoList.length,
         itemBuilder:(context, index){
           return ToDoTile(
-            taskName: toDoList[index][0],
-            taskCompleted: toDoList[index][1],
-            onChanged:(value)=>{
-              checkBoxChanged(value, index),
-            }
+            taskName: toDoList[index][0] as String,
+            taskCompleted: toDoList[index][1] as bool,
+            onDelete: () => deleteTask(index),
+            onChanged: (value) {
+              checkBoxChanged(value, index);
+            },
           );
         },
       ),
