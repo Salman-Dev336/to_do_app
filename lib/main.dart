@@ -1,13 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:to_do_app/data/database.dart';
 import 'package:to_do_app/pages/home_page.dart';
 import 'package:to_do_app/theme/app_colors.dart';
 
-void main() {
-  runApp(const MyApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  final ToDoDatabase database = ToDoDatabase();
+  await database.init();
+
+  runApp(MyApp(database: database));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final ToDoDatabase database;
+
+  const MyApp({super.key, required this.database});
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +52,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      home: const HomePage(),
+      home: HomePage(database: database),
     );
   }
 }

@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:to_do_app/data/database.dart';
 import 'package:to_do_app/theme/app_colors.dart';
 import 'package:to_do_app/utils/dialog_box.dart';
 import 'package:to_do_app/utils/todo_tile.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  final ToDoDatabase database;
+
+  const HomePage({super.key, required this.database});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -12,28 +15,31 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final TextEditingController _controller = TextEditingController();
+  late final List<List<Object>> toDoList;
 
-  final List<List<Object>> toDoList = [
-    ['Make a tutorial', false],
-    ['Do some exercise', false],
-    ['Build a todo app', false],
-  ];
+  @override
+  void initState() {
+    super.initState();
+    toDoList = widget.database.loadTasks();
+  }
 
   int get _completedCount => toDoList.where((task) => task[1] as bool).length;
 
-  void checkBoxChanged(bool? value, int index) {
+  Future<void> checkBoxChanged(bool? value, int index) async {
     setState(() {
       toDoList[index][1] = value ?? false;
     });
+    await widget.database.saveTasks(toDoList);
   }
 
-  void deleteTask(int index) {
+  Future<void> deleteTask(int index) async {
     setState(() {
       toDoList.removeAt(index);
     });
+    await widget.database.saveTasks(toDoList);
   }
 
-  void saveNewTask() {
+  Future<void> saveNewTask() async {
     final String task = _controller.text.trim();
     if (task.isEmpty) return;
 
@@ -41,7 +47,9 @@ class _HomePageState extends State<HomePage> {
       toDoList.add([task, false]);
       _controller.clear();
     });
+    final Future<void> saveOperation = widget.database.saveTasks(toDoList);
     Navigator.of(context).pop();
+    await saveOperation;
   }
 
   void createTask() {
