@@ -17,6 +17,8 @@ class ToDoTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ColorScheme colors = Theme.of(context).colorScheme;
+
     return Padding(
       padding: EdgeInsets.zero,
       child: Slidable(
@@ -35,16 +37,16 @@ class ToDoTile extends StatelessWidget {
           ],
         ),
         child: Material(
-          color: Colors.white,
+          color: colors.surface,
           borderRadius: BorderRadius.circular(20),
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: const Color(0xFFEAECE7)),
-              boxShadow: const [
+              border: Border.all(color: colors.outlineVariant),
+              boxShadow: [
                 BoxShadow(
-                  color: Color(0x0D20313B),
+                  color: Colors.black.withValues(alpha: 0.06),
                   blurRadius: 14,
                   offset: Offset(0, 5),
                 ),
@@ -55,8 +57,8 @@ class ToDoTile extends StatelessWidget {
                 Checkbox(
                   value: taskCompleted,
                   onChanged: onChanged,
-                  activeColor: const Color(0xFF398273),
-                  checkColor: Colors.white,
+                  activeColor: colors.primary,
+                  checkColor: colors.onPrimary,
                 ),
                 const SizedBox(width: 5),
                 Expanded(
@@ -64,8 +66,8 @@ class ToDoTile extends StatelessWidget {
                     taskName,
                     style: Theme.of(context).textTheme.titleSmall?.copyWith(
                       color: taskCompleted
-                          ? const Color(0xFF89938F)
-                          : const Color(0xFF20313B),
+                          ? colors.onSurfaceVariant
+                          : colors.onSurface,
                       decoration: taskCompleted
                           ? TextDecoration.lineThrough
                           : TextDecoration.none,
@@ -73,9 +75,9 @@ class ToDoTile extends StatelessWidget {
                     ),
                   ),
                 ),
-                const Icon(
+                Icon(
                   Icons.drag_indicator_rounded,
-                  color: Color(0xFFBDC6C1),
+                  color: colors.onSurfaceVariant.withValues(alpha: 0.55),
                   size: 20,
                 ),
               ],

@@ -15,6 +15,8 @@ class DialogBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ColorScheme colors = Theme.of(context).colorScheme;
+
     return AlertDialog(
       titlePadding: const EdgeInsets.fromLTRB(24, 24, 24, 8),
       contentPadding: const EdgeInsets.fromLTRB(24, 8, 24, 12),
@@ -25,12 +27,12 @@ class DialogBox extends StatelessWidget {
             width: 38,
             height: 38,
             decoration: BoxDecoration(
-              color: const Color(0xFFFFE7B5),
+              color: colors.secondaryContainer,
               borderRadius: BorderRadius.circular(13),
             ),
-            child: const Icon(
+            child: Icon(
               Icons.edit_note_rounded,
-              color: Color(0xFFB87516),
+              color: colors.onSecondaryContainer,
               size: 23,
             ),
           ),
@@ -51,7 +53,7 @@ class DialogBox extends StatelessWidget {
         decoration: InputDecoration(
           hintText: 'What would you like to do?',
           filled: true,
-          fillColor: const Color(0xFFF7F8F5),
+          fillColor: colors.surfaceContainerHighest,
           contentPadding: const EdgeInsets.symmetric(
             horizontal: 16,
             vertical: 15,
@@ -62,11 +64,11 @@ class DialogBox extends StatelessWidget {
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(15),
-            borderSide: const BorderSide(color: Color(0xFFE6EAE5)),
+            borderSide: BorderSide(color: colors.outlineVariant),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(15),
-            borderSide: const BorderSide(color: Color(0xFF398273), width: 1.5),
+            borderSide: BorderSide(color: colors.primary, width: 1.5),
           ),
         ),
       ),

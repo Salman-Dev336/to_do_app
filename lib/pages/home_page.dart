@@ -6,8 +6,13 @@ import 'package:to_do_app/utils/todo_tile.dart';
 
 class HomePage extends StatefulWidget {
   final ToDoDatabase database;
+  final VoidCallback onThemeToggle;
 
-  const HomePage({super.key, required this.database});
+  const HomePage({
+    super.key,
+    required this.database,
+    required this.onThemeToggle,
+  });
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -74,6 +79,8 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final int totalTasks = toDoList.length;
     final double progress = totalTasks == 0 ? 0 : _completedCount / totalTasks;
+    final ColorScheme colors = Theme.of(context).colorScheme;
+    final bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
       floatingActionButton: FloatingActionButton.extended(
@@ -97,7 +104,7 @@ class _HomePageState extends State<HomePage> {
                           'MAKE TODAY COUNT',
                           style: Theme.of(context).textTheme.labelMedium
                               ?.copyWith(
-                                color: tealColor,
+                                color: colors.primary,
                                 fontWeight: FontWeight.w800,
                                 letterSpacing: 1.6,
                               ),
@@ -114,16 +121,15 @@ class _HomePageState extends State<HomePage> {
                       ],
                     ),
                   ),
-                  Container(
-                    width: 48,
-                    height: 48,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFFFE7B5),
-                      borderRadius: BorderRadius.circular(17),
-                    ),
-                    child: const Icon(
-                      Icons.wb_sunny_rounded,
-                      color: Color(0xFFB87516),
+                  IconButton.filledTonal(
+                    onPressed: widget.onThemeToggle,
+                    tooltip: isDarkMode
+                        ? 'Switch to light mode'
+                        : 'Switch to dark mode',
+                    icon: Icon(
+                      isDarkMode
+                          ? Icons.light_mode_rounded
+                          : Icons.dark_mode_rounded,
                     ),
                   ),
                 ],
@@ -151,13 +157,13 @@ class _HomePageState extends State<HomePage> {
                       vertical: 6,
                     ),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFE7EFEB),
+                      color: colors.secondaryContainer,
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Text(
                       '$totalTasks ${totalTasks == 1 ? 'task' : 'tasks'}',
                       style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                        color: tealColor,
+                        color: colors.onSecondaryContainer,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
@@ -293,6 +299,8 @@ class _EmptyTasks extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ColorScheme colors = Theme.of(context).colorScheme;
+
     return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -301,13 +309,13 @@ class _EmptyTasks extends StatelessWidget {
             width: 76,
             height: 76,
             decoration: BoxDecoration(
-              color: const Color(0xFFE7EFEB),
+              color: colors.secondaryContainer,
               borderRadius: BorderRadius.circular(26),
             ),
-            child: const Icon(
+            child: Icon(
               Icons.checklist_rounded,
               size: 38,
-              color: tealColor,
+              color: colors.primary,
             ),
           ),
           const SizedBox(height: 16),
@@ -323,7 +331,7 @@ class _EmptyTasks extends StatelessWidget {
             textAlign: TextAlign.center,
             style: Theme.of(
               context,
-            ).textTheme.bodyMedium?.copyWith(color: const Color(0xFF75817D)),
+            ).textTheme.bodyMedium?.copyWith(color: colors.onSurfaceVariant),
           ),
         ],
       ),

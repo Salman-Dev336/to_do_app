@@ -3,6 +3,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 class ToDoDatabase {
   static const String _boxName = 'todoBox';
   static const String _tasksKey = 'tasks';
+  static const String _darkModeKey = 'isDarkMode';
 
   static const List<List<Object>> _initialTasks = [
     ['Make a tutorial', false],
@@ -31,5 +32,11 @@ class ToDoDatabase {
 
   Future<void> saveTasks(List<List<Object>> tasks) {
     return _box.put(_tasksKey, tasks);
+  }
+
+  bool loadDarkMode() => _box.get(_darkModeKey, defaultValue: false) as bool;
+
+  Future<void> saveDarkMode(bool isDarkMode) {
+    return _box.put(_darkModeKey, isDarkMode);
   }
 }
